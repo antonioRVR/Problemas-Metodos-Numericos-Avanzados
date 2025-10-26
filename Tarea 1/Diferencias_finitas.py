@@ -13,7 +13,7 @@ def solve_finite_differences(N):
 
     # print(f"Paso de malla h: {h}")
 
-    # Puntos interiores de la malla (donde m es desconocido)
+    # Puntos interiores de la malla
     x_interior = np.linspace(x_start + h, x_end - h, N)
     # print(f"Puntos interiores x: {x_interior}")
 
@@ -71,7 +71,18 @@ def solve_finite_differences(N):
     # 5. Reconstruir la solución completa (añadiendo los bordes)
     m_full = np.concatenate(([0], m_interior, [0]))
     x_full = np.linspace(x_start, x_end, N+2)
-    
+ 
+
+    # # generamos tabla de resultados
+    # print("\n--- Tabla de Resultados ---")
+    # print("   x         m(x)")
+    # print("-------------------------")
+    # for xi, mi in zip(x_full, m_full):
+    #     print(f"{xi:8.5f}   {mi:12.8f}")
+
+
+
+
     return x_full, m_full
 
 

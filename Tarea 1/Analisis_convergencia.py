@@ -4,17 +4,22 @@ def convergence_analysis(N_ref):
     from Diferencias_finitas import solve_finite_differences
     import numpy as np
     import matplotlib.pyplot as plt
-    # 1. Generar una solución de referencia muy precisa
+
+    # 1. Generar una solución de referencia 
     print("Calculando solución de referencia...")
-     # Un N muy grande para simular la solución "exacta"
+     # Un N muy grande para simular la solución exacta
     x_ref, m_ref = solve_finite_differences(N_ref)
+
     # Obtenemos el valor en el centro, x=0, para la comparación
     # El índice del centro es N_ref // 2
     m_exact_center = m_ref[N_ref // 2 + 1] 
-    print(f"Valor de referencia en x=0: {m_exact_center:.8f}")
+    print(N_ref // 2 + 1)
+    print(f"Valor de referencia en x=0: ,{m_exact_center:.8f}")
 
     # 2. Definir los valores de N para la prueba
-    N_values = [5, 10, 50, 100, 200, 300]
+    N_values = [13, 25, 51, 101, 201, 401, 801]
+    N_values = [5, 11, 21, 41, 81, 161, 321, 641]  # Alternativa con más puntos pequeños
+
     h_values = []
     errors = []
 
