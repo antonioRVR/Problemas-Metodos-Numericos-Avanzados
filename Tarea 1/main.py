@@ -1,7 +1,6 @@
 from Diferencias_finitas import solve_finite_differences
 from Analisis_convergencia import convergence_analysis
 import matplotlib.pyplot as plt
-
 # --- Parámetros ---
 
 

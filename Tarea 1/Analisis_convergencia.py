@@ -32,6 +32,7 @@ def convergence_analysis(N_ref):
         h = 2.0 / (N + 1)
         x_sol, m_sol = solve_finite_differences(N)
         
+        
         # El índice del centro es N // 2
         m_center_approx = m_sol[N // 2 + 1]
         

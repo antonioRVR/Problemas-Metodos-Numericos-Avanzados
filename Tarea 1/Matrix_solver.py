@@ -122,3 +122,103 @@ def solve_thomas_algorithm(A, b):
         x[i] = (b_prime[i] - c_prime[i] * x[i+1]) / d_prime[i]
         
     return x
+
+
+def solve_crout(A,b):
+    import numpy as np
+    """
+    Resuelve un sistema de ecuaciones lineales Ax=b usando
+    la descomposición LU de Crout.
+    """
+    N = len(b)
+    # Crear matrices L y U
+    L = np.zeros((N, N))
+    U = np.zeros((N, N))
+    
+    # Descomposición LU
+    for j in range(N):
+        L[j, 0] = A[j, 0]
+    for i in range(N):
+        U[i, i] = 1.0
+    
+    for j in range(1, N):
+        for i in range(j, N):
+            sum1 = sum(L[i, k] * U[k, j] for k in range(j))
+            L[i, j] = A[i, j] - sum1
+        for i in range(j + 1, N):
+            sum2 = sum(L[j, k] * U[k, i] for k in range(j))
+            U[j, i] = (A[j, i] - sum2) / L[j, j]
+    
+    # Resolver Ly=b
+    y = np.zeros(N)
+    for i in range(N):
+        sum3 = sum(L[i, k] * y[k] for k in range(i))
+        y[i] = (b[i] - sum3) / L[i, i]
+    
+    # Resolver Ux=y
+    x = np.zeros(N)
+    for i in range(N - 1, -1, -1):
+        sum4 = sum(U[i, k] * x[k] for k in range(i + 1, N))
+        x[i] = y[i] - sum4
+    
+    return x
+
+def solve_crout_2(A_matrix, b_vector):
+    import numpy as np
+    """
+    Resuelve un sistema tridiagonal Ax=b usando el Algoritmo 6.7 de 
+    Burden y Faires (Factorización de Crout / Algoritmo de Thomas).
+
+    Argumentos:
+    A_matrix: La matriz tridiagonal completa (NxN).
+    b_vector: El vector de términos independientes (Nx1).
+
+    Devuelve:
+    x: El vector de la solución.
+    """
+    
+    # Extraemos el tamaño del sistema
+    n = len(b_vector)
+    
+    # Extraemos las diagonales de la matriz A
+    # El libro las llama a, b, c (inferior, principal, superior)
+    a = np.diag(A_matrix, k=-1) # Diagonal inferior (a_i empieza en i=2)
+    b = np.diag(A_matrix, k=0)  # Diagonal principal (b_i empieza en i=1)
+    c = np.diag(A_matrix, k=1)  # Diagonal superior (c_i empieza en i=1)
+
+    # Creamos los vectores l, u, z del algoritmo
+    # (Los inicializamos con ceros)
+    l = np.zeros(n)
+    u = np.zeros(n - 1) # u solo tiene n-1 elementos
+    z = np.zeros(n)
+    
+    # --- Paso 1: Descomposición y sustitución hacia adelante ---
+    # Sigue exactamente los pasos del Algoritmo 6.7
+    
+    l[0] = b[0]
+    if n > 1:
+        u[0] = c[0] / l[0]
+    
+    for i in range(1, n - 1):
+        # El libro usa a[i] para la diagonal inferior, 
+        # pero el índice en Python de 'a' es i-1
+        l[i] = b[i] - a[i-1] * u[i-1]
+        u[i] = c[i] / l[i]
+        
+    # Último elemento de l
+    if n > 1:
+        l[n-1] = b[n-1] - a[n-2] * u[n-2]
+    
+    # --- Paso 2: Resolver Lz = b ---
+    z[0] = b_vector[0] / l[0]
+    for i in range(1, n):
+        # El índice de 'a' en Python es i-1
+        z[i] = (b_vector[i] - a[i-1] * z[i-1]) / l[i]
+        
+    # --- Paso 3: Sustitución hacia atrás (Resolver Ux = z) ---
+    x = np.zeros(n)
+    x[n-1] = z[n-1]
+    for i in range(n - 2, -1, -1):
+        x[i] = z[i] - u[i] * x[i+1]
+        
+    return x
