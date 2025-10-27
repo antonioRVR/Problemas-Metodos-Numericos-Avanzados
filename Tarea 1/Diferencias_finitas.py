@@ -1,8 +1,5 @@
-
-
-
 def solve_finite_differences(N):
-    from Matrix_solver import Solve_Gaussian_el, solve_thomas_algorithm, solve_crout, solve_crout_2
+    from Matrix_solver import solve_crout
     import numpy as np
     """
     Resuelve el problema de contorno usando el método de diferencias finitas.
@@ -29,46 +26,30 @@ def solve_finite_differences(N):
     # Ensamblar la matriz tridiagonal
     A = np.diag(diag_main) + np.diag(diag_upper, k=1) + np.diag(diag_lower, k=-1)
 
-    # print("Matriz A:")
-    # print(A)
 
     # 3. Construir el vector b
     b = -h**2 * np.ones(N)
-
-    # print("Vector b:")
-    # print(b)
     
-
-    #Problema Restricciones ejercicio: arreglar siguiente bloque
+#  ---------------------------------------------------------------  
 #  --------------------------------------------------------------- 
-    # 4. Resolver el sistema lineal A * m = b
+# Resolver el sistema lineal A * m = b
+#  ---------------------------------------------------------------  
 
 # A opcion simple con numpy
     # m_interior = np.linalg.solve(A, b)
 
-# B opcion con eliminacion gaussiana. La convergencia es muy mala y tarda mucho. Buscamos soluciones mas eficientes
-    # m_interior = Solve_Gaussian_el(A.tolist(), b.tolist())
-    m_interior = solve_crout_2(A, b)
-# C opcion con algoritmo de Thomas (específico para matrices tridiagonales)
-    # m_interior = solve_thomas_algorithm(A, b)
-    
+# B opcion con algoritmo de Crout implementado. ideal para matrices tridiagonales. referenciado de bibligrafia
+    m_interior = solve_crout(A, b)
+
 
 #  ---------------------------------------------------------------  
-    # 5. Reconstruir la solución completa (añadiendo los bordes)
+#  ---------------------------------------------------------------  
+# Reconstruir la solución completa (añadiendo los bordes)
+#  ---------------------------------------------------------------  
+
     m_full = np.concatenate(([0], m_interior, [0]))
     x_full = np.linspace(x_start, x_end, N+2)
  
-
-    # # generamos tabla de resultados
-    # print("\n--- Tabla de Resultados ---")
-    # print("   x         m(x)")
-    # print("-------------------------")
-    # for xi, mi in zip(x_full, m_full):
-    #     print(f"{xi:8.5f}   {mi:12.8f}")
-
-
-
-
     return x_full, m_full
 
 

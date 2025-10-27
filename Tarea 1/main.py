@@ -1,12 +1,17 @@
 from Diferencias_finitas import solve_finite_differences
 from Analisis_convergencia import convergence_analysis
 import matplotlib.pyplot as plt
+
+# ---------------------------------------------------------------
+# ---------------------------------------------------------------
+#Metodo de diferencias finitas
+# ---------------------------------------------------------------
+
 # --- Parámetros ---
+n=6  # Número de puntos definidos (puede modificarse)
+N_test = 2*n+1 # Numero de puntos totales en la malla (incluyendo bordes y 0)
 
 
-N_test = 15 # Numero de puntos
-# tener en cuenta que este N es el doble del N que nosotros queremos, ya que evaluamos la solucion en intervalo por ambos lados del origen 
-# + 1, correspondiente al punto x=0 
 x_sol, m_sol = solve_finite_differences(N_test)
 
 # --- Visualicemos el resultado ---
@@ -27,8 +32,6 @@ plt.legend()
 plt.show()
 
 
-
-
 analis_t_f = input("¿Desea realizar el análisis de convergencia? (s/n): ")
 if analis_t_f.lower() == 's':
     convergence_analysis(3001)  # Llamada a la función de análisis de convergencia
@@ -40,3 +43,8 @@ else:
     print("Análisis de convergencia omitido.")
     print("Fin del programa.")
 
+
+# ---------------------------------------------------------------
+# ---------------------------------------------------------------
+# Método del disparo
+# ---------------------------------------------------------------
